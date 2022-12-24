@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +22,7 @@ public class PlayerScript : MonoBehaviour
     [Header("Player Animator and Gravity")]
     public CharacterController cC;
     public float gravity = -9.81f;
+    public Animator animator;
 
     [Header("Player Jumping and Velocity")]
     public float jumpRange = 1f;
@@ -29,8 +31,10 @@ public class PlayerScript : MonoBehaviour
     float turnCalmVelocity;
     public Transform surfaceCheck;
     bool onSurface;
-    public float surfaceDistance = 0.4f;
+    public float surfaceDistance = 0.2f;
     public LayerMask surfaceMask;
+    public bool isJumping = false;
+    public IEnumerator jumpCoroutine;
 
     // Start is called before the first frame update
     void Start()
@@ -41,20 +45,24 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        onSurface = Physics.CheckSphere(surfaceCheck.position, surfaceDistance, surfaceMask);
-
+        if(!isJumping)
+        {
+            onSurface = Physics.CheckSphere(surfaceCheck.position, surfaceDistance, surfaceMask);
+        }
         if(onSurface && velocity.y < 0)
         {
             velocity.y = -2f;
         }
 
+        print(onSurface);
+
         //gravity
         velocity.y += gravity * Time.deltaTime;
         cC.Move(velocity * Time.deltaTime);
 
-        playerMove();
-
         Jump();
+
+        playerMove();
 
         Sprint();
     }
@@ -67,8 +75,20 @@ public class PlayerScript : MonoBehaviour
 
         Vector3 direction = new Vector3(horizontal_axis, 0f, vertical_axis).normalized;
 
-        if(direction.magnitude >= 0.1f) 
+        if (direction.magnitude >= 0.1f)
         {
+            //Setting the same parameters as the animation controller
+            if(onSurface && !isJumping)
+            {
+                animator.SetBool("Walk", true);
+            }
+            
+            animator.SetBool("Running", false);
+            animator.SetBool("Idle", false);
+            animator.SetBool("AimWalk", false);
+            animator.SetBool("IdleAim", false);
+
+
             //This basically rotates the player model when moving to the sides and makes the rotation smoother.
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + playerCamera.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnCalmVelocity, turnCalmTime);
@@ -78,14 +98,38 @@ public class PlayerScript : MonoBehaviour
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             cC.Move(moveDirection.normalized * playerSpeed * Time.deltaTime);
         }
+        else
+        {
+            animator.SetBool("Idle", true);
+            animator.SetBool("Walk", false);
+            animator.SetBool("Running", false);
+            animator.SetBool("AimWalk", false);
+        }
     }
 
     void Jump()
     {
         if(Input.GetButtonDown("Jump") && onSurface)
         {
+
+            isJumping = true;
+            onSurface= false;
+            animator.SetBool("Jumping", true);
+            animator.SetBool("Walk", false);
+            
+            jumpCoroutine = WaitForJump();
+            StartCoroutine(jumpCoroutine);
+
             velocity.y = Mathf.Sqrt(jumpRange * -2 * gravity);
         }
+    }
+
+
+    IEnumerator WaitForJump()
+    {
+        yield return new WaitForSeconds(1);
+        isJumping = false;
+        animator.SetBool("Jumping", false);
     }
 
 
@@ -101,6 +145,13 @@ public class PlayerScript : MonoBehaviour
 
             if (direction.magnitude >= 0.1f)
             {
+
+                animator.SetBool("Running", true);
+                animator.SetBool("Idle", false);
+                animator.SetBool("Walk", false);
+                animator.SetBool("IdleAim", false);
+
+
                 //This basically rotates the player model when moving to the sides and makes the rotation smoother.
                 float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + playerCamera.eulerAngles.y;
                 float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnCalmVelocity, turnCalmTime);
@@ -109,6 +160,11 @@ public class PlayerScript : MonoBehaviour
                 //This lets the player turn towards mouse location.
                 Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
                 cC.Move(moveDirection.normalized * playerSprint * Time.deltaTime);
+            }
+            else
+            {
+                animator.SetBool("Idle", false);
+                animator.SetBool("Walk", false);
             }
         }
     }
