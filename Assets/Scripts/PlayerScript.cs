@@ -39,7 +39,7 @@ public class PlayerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
@@ -54,7 +54,7 @@ public class PlayerScript : MonoBehaviour
             velocity.y = -2f;
         }
 
-        print(onSurface);
+        //print(onSurface);
 
         //gravity
         velocity.y += gravity * Time.deltaTime;
