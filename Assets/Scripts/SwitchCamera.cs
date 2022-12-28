@@ -10,6 +10,8 @@ public class SwitchCamera : MonoBehaviour
     public GameObject ThirdPersonCam;
     public GameObject ThirdPersonCanvas;
 
+    [Header("Camera Animator")]
+    public Animator animator;
 
     // Update is called once per frame
     void Update()
@@ -17,6 +19,12 @@ public class SwitchCamera : MonoBehaviour
         //When player is in default cam the crosshair will be larger. When right click is pressed the camera will zoom in and the crosshair will change to be more accurate
         if(Input.GetButton("Fire2") && Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
+            animator.SetBool("Idle", false);
+            animator.SetBool("IdleAim", true);
+            animator.SetBool("AimWalk", true);
+            animator.SetBool("Walk", true);
+
+
             ThirdPersonCam.SetActive(false);
             ThirdPersonCanvas.SetActive(false);
             AimCam.SetActive(true);
@@ -24,6 +32,12 @@ public class SwitchCamera : MonoBehaviour
         }
         else if(Input.GetButton("Fire2"))
         {
+            animator.SetBool("Idle", false);
+            animator.SetBool("IdleAim", true);
+            animator.SetBool("AimWalk", false);
+            animator.SetBool("Walk", false);
+
+
             ThirdPersonCam.SetActive(false);
             ThirdPersonCanvas.SetActive(false);
             AimCam.SetActive(true);
@@ -31,6 +45,10 @@ public class SwitchCamera : MonoBehaviour
         }
         else
         {
+            animator.SetBool("Idle", true);
+            animator.SetBool("IdleAim", false);
+            animator.SetBool("AimWalk", false);
+
             ThirdPersonCam.SetActive(true);
             ThirdPersonCanvas.SetActive(true);
             AimCam.SetActive(false);
