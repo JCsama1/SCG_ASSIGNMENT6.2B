@@ -7,7 +7,7 @@ public class Rifle : MonoBehaviour
 
     //Camera will shoot a raycast and when it hits an object it will recognize it
     [Header("Rifle Things")]
-    public Camera camera;
+    public Camera cam;
     public float giveDamageOf = 10f;
     public float shootingRange = 100f;
     public float fireCharge = 15f;
@@ -26,6 +26,7 @@ public class Rifle : MonoBehaviour
     [Header("Rifle Effects")]
     public ParticleSystem muzzleSpark;
     public GameObject impactEffect;
+    public GameObject goreEffect;
 
     // [Header("Sounds and UI")]
 
@@ -100,17 +101,24 @@ public class Rifle : MonoBehaviour
         muzzleSpark.Play();
         RaycastHit hitInfo;
 
-        if(Physics.Raycast(camera.transform.position, camera.transform.forward, out hitInfo, shootingRange)) 
+        if(Physics.Raycast(cam.transform.position, cam.transform.forward, out hitInfo, shootingRange)) 
         {
             Debug.Log(hitInfo.transform.name);
 
             Objects objects = hitInfo.transform.GetComponent<Objects>();
+            Enemy enemy = hitInfo.transform.GetComponent<Enemy>();
 
             if(objects != null)
             {
                 objects.objectHitDamage(giveDamageOf);
                 GameObject impactGO = Instantiate(impactEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
                 Destroy(impactGO, 1f);
+            }
+            else if(enemy != null)
+            {
+                enemy.enemyHitDamage(giveDamageOf);
+                GameObject impactGO = Instantiate(goreEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Destroy(impactGO, 2f);
             }
         }
     }
