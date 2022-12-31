@@ -30,7 +30,9 @@ public class Enemy : MonoBehaviour
     public float timebtwShoot;
     bool previouslyShoot;
 
-    //[Header("Enemy Animation and Spark Effect")]
+    [Header("Enemy Animation and Spark Effect")]
+    public Animator anim;
+    public ParticleSystem muzzleSpark;
 
     [Header("Enemy mood/situation")]
     public float visionRadius;
@@ -72,14 +74,26 @@ public class Enemy : MonoBehaviour
 
     private void Pursueplayer()
     {
-        enemyAgent.SetDestination(playerBody.position);
+        if(enemyAgent.SetDestination(playerBody.position))
         {
             //animations
+            anim.SetBool("Walk", false);
+            anim.SetBool("AimRun", true);
+            anim.SetBool("Shoot", false);
+            anim.SetBool("Die", false);
+
 
             //+vision and shooting radius
 
-            visionRadius = 80f;
-            shootingRadius = 25f;
+            visionRadius = 30f;
+            shootingRadius = 16f;
+        }
+        else
+        {
+            anim.SetBool("Walk", false);
+            anim.SetBool("AimRun", false);
+            anim.SetBool("Shoot", false);
+            anim.SetBool("Die", true);
         }
     }
 
@@ -91,6 +105,9 @@ public class Enemy : MonoBehaviour
 
         if(!previouslyShoot)
         {
+
+            muzzleSpark.Play();
+
             RaycastHit hit;
             if(Physics.Raycast(ShootingRaycastArea.transform.position, ShootingRaycastArea.transform.forward, out hit, shootingRadius))
             {
@@ -102,6 +119,12 @@ public class Enemy : MonoBehaviour
                 {
                     playerBody.playerHitDamage(giveDamage);
                 }
+
+                anim.SetBool("Shoot", true);
+                anim.SetBool("Walk", false);
+                anim.SetBool("AimRun", false);
+                anim.SetBool("Die", false);
+
             }
 
             previouslyShoot = true;
@@ -120,6 +143,11 @@ public class Enemy : MonoBehaviour
 
         if(presentHealth <= 0)
         {
+            anim.SetBool("Walk", false);
+            anim.SetBool("Shoot", false);
+            anim.SetBool("AimRun", false);
+            anim.SetBool("Die", true);
+
             enemyDie();
         }
     }
