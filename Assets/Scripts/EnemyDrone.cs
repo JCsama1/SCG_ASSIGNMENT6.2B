@@ -8,7 +8,7 @@ public class EnemyDrone : MonoBehaviour
     [Header("Enemy Drone Health and Damage")]
     private float enemyHealth = 120f;
     private float presentHealth;
-    public float giveDamage = 5f;
+    public float giveDamage = 3f;
 
     [Header("Enemy Drone Things")]
     public NavMeshAgent enemyAgent;
@@ -31,7 +31,9 @@ public class EnemyDrone : MonoBehaviour
 
     [Header("Enemy Drone Animation and Spark Effect")]
     public Animator anim;
-    //public ParticleSystem muzzleSpark;
+    public ParticleSystem muzzleSpark;
+    public ParticleSystem muzzleFlame;
+    public ParticleSystem DestroyEffect;
 
     [Header("Enemy Drone mood/situation")]
     public float visionRadius;
@@ -76,10 +78,10 @@ public class EnemyDrone : MonoBehaviour
         if (enemyAgent.SetDestination(playerBody.position))
         {
             //animations
-           // anim.SetBool("Walk", false);
-           // anim.SetBool("AimRun", true);
-           // anim.SetBool("Shoot", false);
-           // anim.SetBool("Die", false);
+            anim.SetBool("Walk", false);
+            anim.SetBool("AimRun", true);
+            anim.SetBool("Shoot", false);
+            anim.SetBool("Die", false);
 
 
             //+vision and shooting radius
@@ -89,10 +91,10 @@ public class EnemyDrone : MonoBehaviour
         }
         else
         {
-           //anim.SetBool("Walk", false);
-           //anim.SetBool("AimRun", false);
-           //anim.SetBool("Shoot", false);
-           //anim.SetBool("Die", true);
+           anim.SetBool("Walk", false);
+           anim.SetBool("AimRun", false);
+           anim.SetBool("Shoot", false);
+           anim.SetBool("Die", true);
         }
     }
 
@@ -105,7 +107,8 @@ public class EnemyDrone : MonoBehaviour
         if (!previouslyShoot)
         {
 
-            //muzzleSpark.Play();
+            muzzleSpark.Play();
+            muzzleFlame.Play();
 
             RaycastHit hit;
             if (Physics.Raycast(ShootingRaycastArea.transform.position, ShootingRaycastArea.transform.forward, out hit, shootingRadius))
@@ -119,10 +122,10 @@ public class EnemyDrone : MonoBehaviour
                     playerBody.playerHitDamage(giveDamage);
                 }
 
-               // anim.SetBool("Shoot", true);
-              //  anim.SetBool("Walk", false);
-               // anim.SetBool("AimRun", false);
-               // anim.SetBool("Die", false);
+                anim.SetBool("Shoot", true);
+                anim.SetBool("Walk", false);
+                anim.SetBool("AimRun", false);
+                anim.SetBool("Die", false);
 
             }
 
@@ -136,16 +139,16 @@ public class EnemyDrone : MonoBehaviour
         previouslyShoot = false;
     }
 
-    public void enemyHitDamage(float takeDamage)
+    public void enemyDroneHitDamage(float takeDamage)
     {
         presentHealth -= takeDamage;
 
         if (presentHealth <= 0)
         {
-          //  anim.SetBool("Walk", false);
-           // anim.SetBool("Shoot", false);
-           // anim.SetBool("AimRun", false);
-           // anim.SetBool("Die", true);
+            anim.SetBool("Walk", false);
+            anim.SetBool("Shoot", false);
+            anim.SetBool("AimRun", false);
+            anim.SetBool("Die", true);
 
             enemyDie();
         }
@@ -153,6 +156,7 @@ public class EnemyDrone : MonoBehaviour
 
     private void enemyDie()
     {
+        DestroyEffect.Play();
         enemyAgent.SetDestination(transform.position);
         enemySpeed = 0f;
         shootingRadius = 0f;

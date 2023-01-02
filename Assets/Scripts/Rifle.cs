@@ -27,6 +27,7 @@ public class Rifle : MonoBehaviour
     public ParticleSystem muzzleSpark;
     public GameObject impactEffect;
     public GameObject goreEffect;
+    public GameObject droneEffect;
 
     // [Header("Sounds and UI")]
 
@@ -107,6 +108,7 @@ public class Rifle : MonoBehaviour
 
             Objects objects = hitInfo.transform.GetComponent<Objects>();
             Enemy enemy = hitInfo.transform.GetComponent<Enemy>();
+            EnemyDrone enemyDrone = hitInfo.transform.GetComponent<EnemyDrone>();
 
             if(objects != null)
             {
@@ -118,6 +120,12 @@ public class Rifle : MonoBehaviour
             {
                 enemy.enemyHitDamage(giveDamageOf);
                 GameObject impactGO = Instantiate(goreEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Destroy(impactGO, 2f);
+            }
+            else if (enemyDrone != null)
+            {
+                enemyDrone.enemyDroneHitDamage(giveDamageOf);
+                GameObject impactGO = Instantiate(droneEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
                 Destroy(impactGO, 2f);
             }
         }
