@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     private float enemyHealth = 120f;
     private float presentHealth;
     public float giveDamage = 5f;
+    public HealthBar healthBar;
 
     [Header("Enemy Things")]
     public NavMeshAgent enemyAgent;
@@ -43,6 +44,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         presentHealth = enemyHealth;
+        healthBar.GiveFullHealth(enemyHealth);
         playerBody = GameObject.Find("Player").transform;
         enemyAgent= GetComponent<NavMeshAgent>();
     }
@@ -140,6 +142,7 @@ public class Enemy : MonoBehaviour
     public void enemyHitDamage(float takeDamage)
     {
         presentHealth -= takeDamage;
+        healthBar.SetHealth(presentHealth);
 
         if(presentHealth <= 0)
         {
