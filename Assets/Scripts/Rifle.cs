@@ -29,7 +29,9 @@ public class Rifle : MonoBehaviour
     public GameObject goreEffect;
     public GameObject droneEffect;
 
-    // [Header("Sounds and UI")]
+    [Header("Sounds and UI")]
+    [SerializeField] private GameObject AmmoOutUI;
+    [SerializeField] private int timeToShowUI = 1;
 
     private void Awake()
     {
@@ -89,6 +91,7 @@ public class Rifle : MonoBehaviour
         if (mag == 0)
         {
             //show no ammo text
+            StartCoroutine(ShowAmmoOut());
             return;
         }
 
@@ -98,6 +101,10 @@ public class Rifle : MonoBehaviour
         {
             mag--;
         }
+
+        //updating UI
+        AmmoCount.occurence.UpdateAmmoText(presentAmmunition);
+        AmmoCount.occurence.UpdateMagText(mag);
 
         muzzleSpark.Play();
         RaycastHit hitInfo;
@@ -146,5 +153,12 @@ public class Rifle : MonoBehaviour
         player.playerSpeed = 1.9f;
         player.playerSprint = 3;
         setReloading = false;
+    }
+
+    IEnumerator ShowAmmoOut()
+    {
+        AmmoOutUI.SetActive(true);
+        yield return new WaitForSeconds(timeToShowUI);
+        AmmoOutUI.SetActive(false);
     }
 }

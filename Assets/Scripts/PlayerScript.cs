@@ -19,6 +19,8 @@ public class PlayerScript : MonoBehaviour
     //Creates a field to input the MainCamera
     [Header("Player Script Cameras")]
     public Transform playerCamera;
+    public GameObject deathCamera;
+    public GameObject EndGameMenuUI;
 
     //Creates a field to input the Character Controller
     [Header("Player Animator and Gravity")]
@@ -186,7 +188,10 @@ public class PlayerScript : MonoBehaviour
 
     private void PlayerDie()
     {
+        EndGameMenuUI.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
+
+        deathCamera.SetActive(true);
         Object.Destroy(gameObject, 1.0f);
     }
 }
