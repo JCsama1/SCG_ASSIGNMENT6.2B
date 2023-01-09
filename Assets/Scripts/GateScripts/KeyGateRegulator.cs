@@ -28,7 +28,7 @@ namespace KeyNetwork
         {
             if(keyList.hasKey)
             {
-                //Open_Gate();
+                Open_Gate();
             }
             else
             {
@@ -43,21 +43,21 @@ namespace KeyNetwork
             pauseInteraction= false;
         }
 
-        /*void Open_Gate()
+        void Open_Gate()
         {
             if(!OpenGate && !pauseInteraction)
             {
-                gateAnimation.Play(openAnimationName, 0, 0, 0f);
+                gateAnimation.Play(openAnimationName, 0, 0.0f);
                 OpenGate= true;
                 StartCoroutine(StopGateInterconnection());
             }
             else if(OpenGate && !pauseInteraction)
             {
-                gateAnimation.Play(closeAnimationName, 0, 0, 0f);
+                gateAnimation.Play(closeAnimationName, 0, 0.0f);
                 OpenGate= false;
                 StartCoroutine(StopGateInterconnection());
             }
-        }*/
+        }
 
         IEnumerator showGateLocked()
         {
