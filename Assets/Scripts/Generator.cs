@@ -32,6 +32,7 @@ public class Generator : MonoBehaviour
             redLight.SetActive(true);
             audioSource.Stop();
             //objective complete
+            ObjectivesComplete.occurence.GetObjectivesDone(true, true, true, false);
         }
         else if (button == false)
         {

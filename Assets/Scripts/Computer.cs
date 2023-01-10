@@ -29,6 +29,7 @@ public class Computer : MonoBehaviour
                 lightsOn= false;
                 lights.intensity= 0;
                 //obejctive complete
+                ObjectivesComplete.occurence.GetObjectivesDone(true, true, false, false);
                 //sound effect
             }
         }

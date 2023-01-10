@@ -49,6 +49,7 @@ namespace KeyNetwork
             {
                 gateAnimation.Play(openAnimationName, 0, 0.0f);
                 OpenGate= true;
+                ObjectivesComplete.occurence.GetObjectivesDone(true, false, false, false);
                 StartCoroutine(StopGateInterconnection());
             }
             else if(OpenGate && !pauseInteraction)
