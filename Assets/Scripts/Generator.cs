@@ -16,6 +16,9 @@ public class Generator : MonoBehaviour
     public Animator animation;
     public AudioSource audioSource;
 
+    [Header("Sounds")]
+    public AudioClip objectiveCompletedSound;
+
     private void Awake()
     {
         button= false;
@@ -33,6 +36,7 @@ public class Generator : MonoBehaviour
             audioSource.Stop();
             //objective complete
             ObjectivesComplete.occurence.GetObjectivesDone(true, true, true, false);
+            audioSource.PlayOneShot(objectiveCompletedSound);
         }
         else if (button == false)
         {

@@ -14,6 +14,10 @@ public class Computer : MonoBehaviour
     [SerializeField] private GameObject ComputerUI;
     [SerializeField] private int showComputerUIFor = 5;
 
+    [Header("Sounds")]
+    public AudioClip objectiveCompletedSound;
+    public AudioSource audioSource;
+
     private void Awake()
     {
         lights= GetComponent<Light>();
@@ -31,6 +35,7 @@ public class Computer : MonoBehaviour
                 //obejctive complete
                 ObjectivesComplete.occurence.GetObjectivesDone(true, true, false, false);
                 //sound effect
+                audioSource.PlayOneShot(objectiveCompletedSound);
             }
         }
     }

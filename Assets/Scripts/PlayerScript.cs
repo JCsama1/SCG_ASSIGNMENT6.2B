@@ -15,6 +15,7 @@ public class PlayerScript : MonoBehaviour
     private float playerHealth = 120f;
     private float presentHealth;
     public HealthBar healthBar;
+    [SerializeField] UnityEngine.AudioSource audioSource;
 
     //Creates a field to input the MainCamera
     [Header("Player Script Cameras")]
@@ -180,7 +181,7 @@ public class PlayerScript : MonoBehaviour
         presentHealth -= takeDamage;
         healthBar.SetHealth(presentHealth);
 
-        if(presentHealth <= 0) 
+        if (presentHealth <= 0) 
         {
             PlayerDie();
         }

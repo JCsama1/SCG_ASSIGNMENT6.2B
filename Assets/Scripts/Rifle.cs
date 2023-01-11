@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Rifle : MonoBehaviour
 {
+
 
     //Camera will shoot a raycast and when it hits an object it will recognize it
     [Header("Rifle Things")]
@@ -32,6 +34,10 @@ public class Rifle : MonoBehaviour
     [Header("Sounds and UI")]
     [SerializeField] private GameObject AmmoOutUI;
     [SerializeField] private int timeToShowUI = 1;
+    public AudioClip shootingSound;
+    public AudioClip reloadingSound;
+    [SerializeField] UnityEngine.AudioSource audioSource;
+
 
     private void Awake()
     {
@@ -107,6 +113,7 @@ public class Rifle : MonoBehaviour
         AmmoCount.occurence.UpdateMagText(mag);
 
         muzzleSpark.Play();
+        audioSource.PlayOneShot(shootingSound);
         RaycastHit hitInfo;
 
         if(Physics.Raycast(cam.transform.position, cam.transform.forward, out hitInfo, shootingRange)) 
@@ -147,6 +154,7 @@ public class Rifle : MonoBehaviour
         setReloading = true;
         Debug.Log("Reloading...");
         animator.SetBool("Reloading", true);
+        audioSource.PlayOneShot(reloadingSound);
         yield return new WaitForSeconds(reloadingTime);
         animator.SetBool("Reloading", false);
         presentAmmunition = maximumAmmunition;
