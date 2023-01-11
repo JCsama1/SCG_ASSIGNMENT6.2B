@@ -18,7 +18,7 @@ public class FinalObjective : MonoBehaviour
         if (Input.GetKeyDown(vehicleButton) && Vector3.Distance(transform.position, player.transform.position) < radius)
         {
             Time.timeScale= 1f;
-            SceneManager.LoadScene("Menu");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             //objective complete
             ObjectivesComplete.occurence.GetObjectivesDone(true, true, true, true);
         }

@@ -152,6 +152,9 @@ public class EnemyDrone : MonoBehaviour
         presentHealth -= takeDamage;
         healthBar.SetHealth(presentHealth);
 
+        visionRadius = 40f;
+        shootingRadius = 19f;
+
         if (presentHealth <= 0)
         {
             anim.SetBool("Walk", false);

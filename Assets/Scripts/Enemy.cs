@@ -148,7 +148,10 @@ public class Enemy : MonoBehaviour
         presentHealth -= takeDamage;
         healthBar.SetHealth(presentHealth);
 
-        if(presentHealth <= 0)
+        visionRadius = 40f;
+        shootingRadius = 19f;
+
+        if (presentHealth <= 0)
         {
             anim.SetBool("Walk", false);
             anim.SetBool("Shoot", false);

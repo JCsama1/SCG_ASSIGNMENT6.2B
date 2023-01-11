@@ -13,7 +13,7 @@ public class Generator : MonoBehaviour
     [Header("Generator Sound Effects and radius")]
     private float radius = 2f;
     public PlayerScript player;
-    public Animator animation;
+    public Animator anim;
     public AudioSource audioSource;
 
     [Header("Sounds")]
@@ -30,7 +30,7 @@ public class Generator : MonoBehaviour
         if(Input.GetKeyDown("q") && Vector3.Distance(transform.position, player.transform.position) < radius)
         {
             button = true;
-            animation.enabled= false;
+            anim.enabled= false;
             greenLight.SetActive(false);
             redLight.SetActive(true);
             audioSource.Stop();
